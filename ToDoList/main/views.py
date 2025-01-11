@@ -21,28 +21,24 @@ def create(request):
 
 def list(request,id):
     name=ToDoList.objects.get(id=id)
+    p=name.id
     it=name.items_set.all()
     if request.method=="POST":
         text=request.POST.get("item")
-        if request.POST.get("newItem"):
-            if text!="":
-                name.items_set.create(text=text,complete=False)
+
+        if text!="":
+            name.items_set.create(text=text,complete=False)
+            return redirect("list",p)
                 
-        if request.POST.get("del"):
-            
-            for item in name.items_set.all():
-                print(request.POST.get(str(item.id)))
-                if request.POST.get(str(item.id))=="del":
-                    name.items_set.remove(item)
-            
-   
+        
+    
     return render(request,"list.html",{"name":name.name,"items":it})
 
 def delete_item(request,id):
     item=get_object_or_404(items,id=id)
     item.delete()
     todol=item.todolist.id
-
+    print("hellowww")
     return redirect("list",todol)
 
 def delete_list(request,id):
@@ -53,8 +49,14 @@ def delete_list(request,id):
 def update(request,id):
     text=request.POST.get("newdat")
     print("hello")
-    if text:
-        print(text)
+    item=get_object_or_404(items,id=id)
+    todo=item.todolist.id
+    if text!="":
+       
+        item.text=text
+        
+        item.save()
+        print("text updated")
     else:
         print("empty text")
-    return redirect("home")
+    return redirect("list",todo)

@@ -1,16 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Lists</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9; /* Light gray-blue background */
+            color: #333; /* Dark text */
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff; /* White card background */
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF; /* Primary blue color */
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc; /* Light border for each item */
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li a {
+            text-decoration: none;
+            color: #007BFF; /* Blue link */
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        li a:hover {
+            color: #0056b3; /* Darker blue on hover */
+        }
+
+        .create-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #007BFF; /* Primary blue */
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .create-link:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
 </head>
 <body>
-        {% for td in t %}
-        <li><a href="{{td.id}}/">{{td.name}} {{td.id}}</a>
-        <a href="{% url "deletelist" td.id %}">Delete List</a>
-        </li>
-        {% endfor %}
-        <a href="create/">Click Here to Create Your List</a>
+    <div class="container">
+        <h1>My Lists</h1>
+        <ul>
+            {% for td in t %}
+            <li>
+                <a href="{{td.id}}/">{{td.name}}</a>
+                <a href="{% url 'deletelist' td.id %}" style="color: red;">Delete</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <a href="create/" class="create-link">Click Here to Create Your List</a>
+    </div>
 </body>
 </html>
