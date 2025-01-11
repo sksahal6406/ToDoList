@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9; /* Light gray-blue background */
+            color: #333; /* Dark text color */
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff; /* White card */
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #007BFF; /* Blue accent color */
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa; /* Light background for list items */
+            border: 1px solid #ddd; /* Light gray border */
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        li a {
+            color: #dc3545; /* Red for delete links */
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: color 0.3s;
+        }
+
+        li a:hover {
+            color: #a71d2a; /* Darker red on hover */
+        }
+
+        .update-btn {
+            padding: 5px 10px;
+            background: #007BFF; /* Blue button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .update-btn:hover {
+            background: #0056b3; /* Darker blue */
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        form label {
+            font-weight: bold;
+        }
+
+        form input[type="text"] {
+            padding: 8px;
+            width: calc(100% - 20px);
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form button {
+            padding: 10px 15px;
+            background-color: #28a745; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        form button:hover {
+            background-color: #218838; /* Darker green */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% block content %}
+        <h1>{{ name }}</h1>
+        <ul>
+            {% for item in items %}
+            <li>
+                <div>
+                    <input type="checkbox" name="complete" id="{{ item.id }}" value="checked" {% if item.complete %}checked{% endif %}>
+                    {{ item.text }}
+                </div>
+                <div>
+                    <a href="{% url 'deleteitem' item.id %}">Delete</a>
+                    <button class="update-btn" onclick="update({{ item.id }})" type="button">Update</button>
+                </div>
+                <div id="f{{ item.id }}"></div>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <form method="post">
+            {% csrf_token %}
+            <label>Enter New Item:</label>
+            <input type="text" name="item" id="item" placeholder="Add a new task">
+            <button type="submit">Add</button>
+        </form>
+        {% endblock %}
+    </div>
+
+    <script>
+        let flag = true;
+
+        function update(itemid) {
+            console.log("Update Button Clicked for Item ID:", itemid);
+            const csrfToken = '{{ csrf_token }}'; // Get CSRF token from Django context
+
+            if (flag === true) {
+                document.getElementById(`f${itemid}`).innerHTML = `
+                    <form method="POST" action="/update/${itemid}">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                        <input type="text" name="newdat" placeholder="Edit your task">
+                        <button type="submit" class="update-btn">Save</button>
+                    </form>
+                `;
+                flag = false;
+            } else {
+                document.getElementById(`f${itemid}`).innerHTML = "";
+                flag = true;
+            }
+        }
+    </script>
+</body>
+</html>
