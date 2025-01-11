@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+</head>
+<body>
+        {% for td in t %}
+        <li><a href="{{td.id}}/">{{td.name}}</a></li>
+        {% endfor %}
+        <a href="create/">Click Here to Create Your List</a>
+</body>
+</html>

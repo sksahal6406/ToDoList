@@ -1,0 +1,51 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <h1>{{name}}</h1>
+    <form method="POST",action="/list/">
+        {% csrf_token %}
+ 
+
+        
+        {% for item in items  %}
+        {% if item.complete == True %}
+            <li><ol>
+                {{item.text}}<input type="checkbox" name="complete" id="cb" name="{{item.id}}" value="unchecked">
+                
+            </ol></li>
+
+        {% else %}
+        <li><ol>{{item.text}}<input type="checkbox" name="complete" id="{{item.id}}" name="{{item.id}}" value="checked" checked>
+        
+        </ol></li>
+
+        {% endif %}
+        <script>
+            function add(){
+                document.getElementById({{item.id}}).value="del";
+                
+                
+            }
+        </script>
+        
+        {% endfor %}
+        
+        
+        
+
+    <br>
+        <label>Enter New Item
+        <input type="text" name="item" id="item" required></label>
+        <button type="submit" value="newItem" name="newItem">Add</button>
+    </form>
+    {% endblock %}
+</body>
+</html>
