@@ -7,7 +7,9 @@
 </head>
 <body>
         {% for td in t %}
-        <li><a href="{{td.id}}/">{{td.name}}</a></li>
+        <li><a href="{{td.id}}/">{{td.name}} {{td.id}}</a>
+        <a href="{% url "deletelist" td.id %}">Delete List</a>
+        </li>
         {% endfor %}
         <a href="create/">Click Here to Create Your List</a>
 </body>

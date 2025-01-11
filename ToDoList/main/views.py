@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .models import *
 
 # Create your views here.
@@ -38,6 +38,23 @@ def list(request,id):
    
     return render(request,"list.html",{"name":name.name,"items":it})
 
-def delete(request,id):
-    
-    return render()
+def delete_item(request,id):
+    item=get_object_or_404(items,id=id)
+    item.delete()
+    todol=item.todolist.id
+
+    return redirect("list",todol)
+
+def delete_list(request,id):
+    todol=get_object_or_404(ToDoList,id=id)
+    todol.delete()
+    return redirect("home")
+
+def update(request,id):
+    text=request.POST.get("newdat")
+    print("hello")
+    if text:
+        print(text)
+    else:
+        print("empty text")
+    return redirect("home")
